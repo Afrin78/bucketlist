@@ -1,0 +1,1 @@
+export const IMG_URL = "https://heartlandprecepts.com/wp-content/uploads/2018/12/bucket-list-1.jpg";
