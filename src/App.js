@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./App.css";
-import { IMG_URL } from "./config";
 import PopUp from "./Components/PopUp";
+import Bucket from "./Components/Bucket";
+import SearchSection from "./Components/SearchSection";
 
 function App() {
   const [searchInput, setSearchInput] = useState("");
@@ -35,72 +36,12 @@ function App() {
   return (
     <>
       <h1 className="font-bold text-center text-2xl m-4">Bucket List</h1>
-      <div className="flex justify-center gap-2 m-4">
-        <input
-          type="text"
-          placeholder="Search"
-          value={searchInput}
-          onChange={(e) => {
-            setSearchInput(e.target.value);
-          }}
-          className="border-solid border-2 border-black w-3/6"
-        />
-        <button
-          className="border-solid border-2 border-black w-1/6 bg-gray-300"
-          onClick={handleClick}
-        >
-          Search
-        </button>
-        <button
-          className="border-solid border-2 border-black w-1/6 bg-gray-300"
-          onClick={handleEnter}
-        >
-          Enter
-        </button>
-      </div>
-
+      
+      <SearchSection searchInput={searchInput} setSearchInput={setSearchInput} handleClick={handleClick} handleEnter={ handleEnter} />
       <div className="flex justify-between m-8 p-4">
-        <div className="w-1/3 p-2 border border-black rounded">
-          <div className="flex flex-col items-center">
-            <img src={IMG_URL} alt="Bucket 1" />
-            <h2 className="font-bold text-center mb-2">Bucket 1</h2>
-          </div>
-          {bucket1.map((item, index) => {
-            return (
-              <div key={index} className="m-4 p-2 border border-black">
-                <span>{item}</span>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="w-1/3 p-2 border border-black rounded">
-          <div className="flex flex-col items-center">
-            <img src={IMG_URL} alt="Bucket 2" />
-            <h2 className="font-bold text-center mb-2">Bucket 2</h2>
-          </div>
-          {bucket2.map((item, index) => {
-            return (
-              <div key={index} className="m-4 p-2 border border-black">
-                <span>{item}</span>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="w-1/3 p-2 border border-black rounded">
-          <div className="flex flex-col items-center">
-            <img src={IMG_URL} alt="Bucket 3" />
-            <h2 className="font-bold text-center mb-2">Bucket 3</h2>
-          </div>
-          {bucket3.map((item, index) => {
-            return (
-              <div key={index} className="m-4 p-2 border border-black">
-                <span>{item}</span>
-              </div>
-            );
-          })}
-        </div>
+        <Bucket bucket={bucket1} title={"Bucket 1"}/>
+        <Bucket bucket={bucket2} title={"Bucket 2"} />
+        <Bucket bucket={bucket3} title={"Bucket 3"} />
       </div>
 
       {popUp && (
