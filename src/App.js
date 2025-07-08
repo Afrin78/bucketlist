@@ -11,7 +11,7 @@ function App() {
   const [bucket2, setBucket2] = useState([]);
   const [bucket3, setBucket3] = useState(["akif"]);
   const [popUp, setPopUp] = useState(false);
-
+ <h1>Hello</h1>
   const handleEnter = () => {
     setPopUp(true);
   };
