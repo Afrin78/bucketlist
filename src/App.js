@@ -1,14 +1,15 @@
 import { useState } from "react";
 import "./App.css";
-import { IMG_URL } from "./config";
 import PopUp from "./Components/PopUp";
+import Bucket from "./Components/Bucket";
+import SearchComponent from "./Components/SearchComponent";
 
 function App() {
   const [searchInput, setSearchInput] = useState("");
   const [newItem, setNewItem] = useState("");
-  const [bucket1, setBucket1] = useState([]);
+  const [bucket1, setBucket1] = useState(["atib", "anis"]);
   const [bucket2, setBucket2] = useState([]);
-  const [bucket3, setBucket3] = useState([]);
+  const [bucket3, setBucket3] = useState(["akif"]);
   const [popUp, setPopUp] = useState(false);
 
   const handleEnter = () => {
@@ -16,12 +17,18 @@ function App() {
   };
 
   const handleClick = () => {
-    const input = searchInput.trim();
+    const input = searchInput.trim().toLowerCase();
     const foundIn = [];
 
-    if (bucket1.includes(input)) foundIn.push("Bucket 1");
-    if (bucket2.includes(input)) foundIn.push("Bucket 2");
-    if (bucket3.includes(input)) foundIn.push("Bucket 3");
+    if (bucket1.filter((el) => el.toLowerCase() === input).length > 0) {
+      foundIn.push("Bucket 1");
+    }
+    if (bucket2.filter((el) => el.toLowerCase() === input).length > 0) {
+      foundIn.push("Bucket 2");
+    }
+    if (bucket3.filter((el) => el.toLowerCase() === input).length > 0) {
+      foundIn.push("Bucket 3");
+    }
 
     if (foundIn.length === 3) {
       alert(`"${input}" is present in all buckets`);
@@ -32,85 +39,56 @@ function App() {
     }
   };
 
+  const handleSetBucket = () => {
+
+    const trimmedItem = newItem.trim();
+    if (!trimmedItem) return;
+
+    // const bucketLengths = [bucket1.length, bucket2.length, bucket3.length];
+    // const minLength = Math.min(...bucketLengths);
+    // const minIndex = bucketLengths.indexOf(minLength);
+
+    if (/^[0-9]+$/.test(trimmedItem)) {
+      setBucket1((prev) => [...prev, trimmedItem]);
+    } else if (/^[a-zA-Z]+$/.test(trimmedItem)) {
+      setBucket2((prev) => [...prev, trimmedItem]);
+    } else {
+      setBucket3((prev) => [...prev, trimmedItem]);
+    }
+
+    setNewItem("");
+    setPopUp(false);
+  };
+
   return (
     <>
       <h1 className="font-bold text-center text-2xl m-4">Bucket List</h1>
-      <div className="flex justify-center gap-2 m-4">
-        <input
-          type="text"
-          placeholder="Search"
-          value={searchInput}
-          onChange={(e) => {
-            setSearchInput(e.target.value);
-          }}
-          className="border-solid border-2 border-black w-3/6"
-        />
-        <button
-          className="border-solid border-2 border-black w-1/6 bg-gray-300"
-          onClick={handleClick}
-        >
-          Search
-        </button>
-        <button
-          className="border-solid border-2 border-black w-1/6 bg-gray-300"
-          onClick={handleEnter}
-        >
-          Enter
-        </button>
-      </div>
+      <SearchComponent
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        handleClick={handleClick}
+        handleEnter={handleEnter}
+      />
 
       <div className="flex justify-between m-8 p-4">
-        <div className="w-1/3 p-2 border border-black rounded">
-          <div className="flex flex-col items-center">
-            <img src={IMG_URL} alt="Bucket 1" />
-            <h2 className="font-bold text-center mb-2">Bucket 1</h2>
-          </div>
-          {bucket1.map((item, index) => {
-            return (
-              <div key={index} className="m-4 p-2 border border-black">
-                <span>{item}</span>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="w-1/3 p-2 border border-black rounded">
-          <div className="flex flex-col items-center">
-            <img src={IMG_URL} alt="Bucket 2" />
-            <h2 className="font-bold text-center mb-2">Bucket 2</h2>
-          </div>
-          {bucket2.map((item, index) => {
-            return (
-              <div key={index} className="m-4 p-2 border border-black">
-                <span>{item}</span>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="w-1/3 p-2 border border-black rounded">
-          <div className="flex flex-col items-center">
-            <img src={IMG_URL} alt="Bucket 3" />
-            <h2 className="font-bold text-center mb-2">Bucket 3</h2>
-          </div>
-          {bucket3.map((item, index) => {
-            return (
-              <div key={index} className="m-4 p-2 border border-black">
-                <span>{item}</span>
-              </div>
-            );
-          })}
-        </div>
+        <Bucket bucket={bucket1} title={"BUCKET 1"} />
+        <Bucket bucket={bucket2} title={"BUCKET 2"} />
+        <Bucket bucket={bucket3} title={"BUCKET 3"} />
       </div>
 
       {popUp && (
-        <PopUp newItem={newItem} setNewItem={setNewItem} 
-        bucket1={bucket1} bucket2={bucket2} bucket3={bucket3}
-        setBucket1={setBucket1} setBucket2={setBucket2} 
-        setBucket3={setBucket3} setPopUp={setPopUp}/>
+        <PopUp
+          newItem={newItem}
+          setNewItem={setNewItem}
+          handleSetBucket={handleSetBucket}
+          setPopUp={setPopUp}
+        />
       )}
     </>
   );
 }
 
 export default App;
+
+
+
